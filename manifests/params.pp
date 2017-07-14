@@ -24,6 +24,15 @@ class lxc::params {
         }
       }
     }
+    'Debian': {
+      case $::operatingsystemmajrelease {
+      '6': { error ('debian squeeze is not supported') }
+      '7': { error ('debian wheezy is not supported') }
+      '8': { 
+         $lxc_ruby_bindings_gem_deps = [
+            'build-essential', 'ruby-dev', 'lxc-dev', 'libcgmanager0'
+          ]
+      }
     default: {
       fail("${::operatingsystem} is not supported by ${module_name} module.")
     }
