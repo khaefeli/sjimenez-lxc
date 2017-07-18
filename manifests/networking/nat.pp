@@ -32,12 +32,17 @@ class lxc::networking::nat inherits lxc::params {
 
   $local_lxc_networking_nat_dns_domain = $lxc::lxc_networking_nat_dns_domain
 
-  file { $lxc::params::network_nat_conf:
-    ensure  => $nat_ensure,
-    content => template("${module_name}/config/lxc-net.erb"),
-    notify  => Service[$lxc::params::network_nat_service],
+  # if using the debian host device as bridge
+  # set to undef and dont install lxc-net
+  # https://wiki.debian.org/LXC/SimpleBridge
+  if $lxc::params::network_nat_conf{
+    file { $lxc::params::network_nat_conf:
+      ensure  => $nat_ensure,
+      content => template("${module_name}/config/lxc-net.erb"),
+      notify  => Service[$lxc::params::network_nat_service],
+    }
   }
-
+  
   if $lxc::lxc_networking_nat_dhcp_conf {
     $local_lxc_networking_nat_dhcp_options = $lxc::lxc_networking_nat_dhcp_options
 
