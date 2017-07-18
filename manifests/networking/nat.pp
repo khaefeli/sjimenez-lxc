@@ -54,10 +54,11 @@ class lxc::networking::nat inherits lxc::params {
       changes => "set except-interface ${lxc::lxc_networking_nat_bridge}",
     }
   }
-
-  service { $lxc::params::network_nat_service:
-    ensure => $srv_nat_ensure,
-    enable => $srv_nat_enable,
+  if $lxc::params::network_nat_service {
+    service { $lxc::params::network_nat_service:
+      ensure => $srv_nat_ensure,
+      enable => $srv_nat_enable,
+    }
   }
 }
 
