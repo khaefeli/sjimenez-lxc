@@ -20,8 +20,7 @@ class lxc::networking::containers inherits lxc::params {
   }
 
   $local_lxc_networking_extra_options = $lxc::lxc_networking_extra_options
-
-  $set_defaults = false
+  $local_lxc_set_defaults = $lxc::lxc_networking_set_defaults
 
   file { $lxc::params::network_default_conf:
     ensure  => present,

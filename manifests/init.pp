@@ -85,6 +85,11 @@
 #   will be modified with $lxc_networking_nat_bridge value. Default
 #   /etc/dnsmasq.d/lxc.
 #
+# [*lxc_networking_set_defaults*]
+#   Only set the /etc/lxc/defaults.conf network related values
+#   if true. Avoids adding the values twice when lxc_create
+#   adds the config.
+#
 # === Examples
 #
 #  include lxc
@@ -126,7 +131,8 @@ class lxc (
   $lxc_networking_nat_dhcp_conf      = undef,
   $lxc_networking_nat_dhcp_options   = undef,
   $lxc_networking_nat_update_dnsmasq = $lxc::params::lxc_networking_nat_update_dnsmasq,
-  $lxc_networking_nat_dnsmasq_conf   = $lxc::params::lxc_networking_nat_dnsmasq_conf
+  $lxc_networking_nat_dnsmasq_conf   = $lxc::params::lxc_networking_nat_dnsmasq_conf,
+  $lxc_networking_set_defaults       = $lxc::params::lxc_networking_set_defaults,
 ) inherits lxc::params {
 
   contain 'lxc::install'

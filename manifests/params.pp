@@ -35,6 +35,7 @@ class lxc::params (
   $lxc_networking_nat_max_hosts      = undef,
   $lxc_networking_nat_update_dnsmasq = false,
   $lxc_networking_nat_dnsmasq_conf   = undef,
+  $lxc_networking_set_defaults       = false,
   $network_default_conf              = '/etc/lxc/default.conf',
   $network_nat_conf                  = undef,
   $network_nat_service               = undef,

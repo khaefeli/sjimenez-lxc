@@ -1,6 +1,6 @@
 lxc.network.type = empty
 lxc.network.flags = <%= scope['lxc::lxc_networking_flags'] %>
-<% if @set_defaults == true -%>
+<% if @local_lxc_set_defaults -%>
 lxc.network.type = <%= scope['lxc::lxc_networking_type'] %>
 lxc.network.link = <%= scope['lxc::lxc_networking_device_link'] %>
 lxc.network.hwaddr = <%= scope['lxc::lxc_networking_hwaddr'] %>
