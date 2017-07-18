@@ -21,6 +21,8 @@ class lxc::networking::containers inherits lxc::params {
 
   $local_lxc_networking_extra_options = $lxc::lxc_networking_extra_options
 
+  $set_defaults = false
+
   file { $lxc::params::network_default_conf:
     ensure  => present,
     content => template("${module_name}/config/default.conf.erb"),
