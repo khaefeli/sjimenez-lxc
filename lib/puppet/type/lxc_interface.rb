@@ -14,11 +14,6 @@ Puppet::Type.newtype(:lxc_interface) do
     newvalues(/\w+/)
   end
 
-  newparam(:index) do
-    desc 'Index for interface configuration'
-    newvalues(/^0$|^[1-9]+$/)
-  end
-
   newproperty(:device_name) do
     desc 'Device name for the interface in the container'
     newvalues(/\w+/)
@@ -127,7 +122,6 @@ Puppet::Type.newtype(:lxc_interface) do
   end
 
   validate do
-    raise ArgumentError, 'Index parameter is required' if self[:index].nil?
     raise ArgumentError, 'Container parameter is required' if self[:container].nil?
     raise ArgumentError, 'device_name parameter is required' if self[:device_name].nil?
   end
