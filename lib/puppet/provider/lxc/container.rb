@@ -1,6 +1,6 @@
 Puppet::Type.type(:lxc).provide(:container) do
 
-  defaultfor :operatingsystem => :ubuntu
+  defaultfor :operatingsystem => :debian
   confine :feature => :lxc, :kernel => 'Linux'
 
   attr_accessor :container, :lxc_version

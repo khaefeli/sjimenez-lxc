@@ -9,7 +9,7 @@ Puppet::Type.newtype(:lxc) do
 
   newparam(:template) do
     desc 'Template on which the container will be based.'
-    defaultto 'ubuntu'
+    defaultto 'debian'
     newvalues(/\w+/)
   end
 
