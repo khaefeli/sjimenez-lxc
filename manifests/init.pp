@@ -147,13 +147,11 @@ class lxc (
 ) inherits ::lxc::params {
 
   # TODO: only contain needed modules
-  contain 'lxc::install'
+  contain 'lxc::package'
   contain 'lxc::service'
-  contain 'lxc::networking::containers'
-  contain 'lxc::networking::nat'
+  contain 'lxc::networking'
 
-  Class['lxc::install'] ->
+  Class['lxc::package'] ->
   Class['lxc::service'] ->
-  Class['lxc::networking::containers'] ->
-  Class['lxc::networking::nat']
+  Class['lxc::networking']
 }
