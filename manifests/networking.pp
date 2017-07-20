@@ -32,12 +32,4 @@ class lxc::networking {
     fail('lxc_networking_device_link and lxc_networking_type are required')
   }
 
-  # setup default config if needed
-  # TODO: move to other manifest (not only network related)
-  if $set_defaults {
-    file { $default_conf:
-      ensure  => present,
-      content => template("${module_name}/config/default.conf.erb"),
-    }
-  }
 }

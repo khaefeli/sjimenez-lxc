@@ -19,11 +19,4 @@ class lxc::networking::containers inherits lxc::params {
     fail('lxc_networking_device_link and lxc_networking_type are required')
   }
 
-  $local_lxc_networking_extra_options = $lxc::lxc_networking_extra_options
-  $local_lxc_set_defaults = $lxc::lxc_networking_set_defaults
-
-  file { $lxc::params::network_default_conf:
-    ensure  => present,
-    content => template("${module_name}/config/default.conf.erb"),
-  }
 }

@@ -146,14 +146,18 @@ class lxc (
   $lxc_networking_bridge_enable      = $lxc::params::lxc_networking_bridge_enable,
   $lxc_bridge_package                = $lxc::params::lxc_bridge_package,
   $lxc_networking_set_defaults       = $lxc::params::lxc_networking_set_defaults,
+  $lxc_network_default_conf          = $lxc::params::network_default_conf,
 ) inherits ::lxc::params {
 
   # contain needed modules
   contain '::lxc::package'
   contain '::lxc::service'
   contain '::lxc::networking'
+  contain '::lxc::template'
 
+  # class ordering
   Class['::lxc::package'] ->
   Class['::lxc::service'] ->
-  Class['::lxc::networking']
+  Class['::lxc::networking'] ->
+  Class['::lxc::template']
 }
