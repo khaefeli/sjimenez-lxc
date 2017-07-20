@@ -15,7 +15,7 @@ class lxc::package::debian {
   # set the params for the local scope
   $package_name         = $::lxc::lxc_lxc_package
   $package_ensure       = $::lxc::lxc_lxc_version
-  $bindings_deps        = 'build-essential', 'ruby-dev', 'lxc-dev', 'libcgmanager0' #defined here for debian (only support ruby so far)
+  $bindings_deps        = ['build-essential', 'ruby-dev', 'lxc-dev', 'libcgmanager0'] #defined here for debian (only support ruby so far)
   $bindings_ensure      = 'present'
   $bindings_version     = $::lxc::lxc_ruby_bindings_version
   $bindings_package     = $::lxc::lxc_ruby_bindings_package
