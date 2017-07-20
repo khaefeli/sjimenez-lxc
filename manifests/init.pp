@@ -85,6 +85,11 @@
 #   will be modified with $lxc_networking_nat_bridge value. Default
 #   /etc/dnsmasq.d/lxc.
 #
+# [*lxc_networking_set_defaults*]
+#   Only set the /etc/lxc/defaults.conf network related values
+#   if true. Avoids adding the values twice when lxc_create
+#   adds the config.
+#
 # === Examples
 #
 #  include lxc
@@ -98,23 +103,32 @@
 # Copyright 2014 Sergio Jimenez, unless otherwise noted.
 #
 class lxc (
+  # Ruby bindings for ruby-lxc
   $lxc_ruby_bindings_provider        = $lxc::params::lxc_ruby_bindings_provider,
   $lxc_ruby_bindings_package         = $lxc::params::lxc_ruby_bindings_package,
   $lxc_ruby_bindings_gem_deps        = $lxc::params::lxc_ruby_bindings_gem_deps,
   $lxc_ruby_bindings_version         = $lxc::params::lxc_ruby_bindings_version,
+
+  # Lxc packages / service
   $lxc_lxc_package                   = $lxc::params::lxc_lxc_package,
   $lxc_lxc_version                   = $lxc::params::lxc_lxc_version,
   $lxc_lxc_service                   = $lxc::params::lxc_lxc_service,
   $lxc_lxc_service_ensure            = $lxc::params::lxc_lxc_service_ensure,
   $lxc_lxc_service_enabled           = $lxc::params::lxc_lxc_service_enabled,
+
+  # Cgmanager
   $lxc_cgmanager_service             = $lxc::params::lxc_cgmanager_service,
   $lxc_cgmanager_service_ensure      = $lxc::params::lxc_cgmanager_service_ensure,
   $lxc_cgmanager_service_enabled     = $lxc::params::lxc_cgmanager_service_enabled,
+
+  # Lxc networking basics
   $lxc_networking_device_link        = $lxc::params::lxc_networking_device_link,
   $lxc_networking_type               = $lxc::params::lxc_networking_type,
   $lxc_networking_flags              = $lxc::params::lxc_networking_flags,
   $lxc_networking_hwaddr             = $lxc::params::lxc_networking_hwaddr,
   $lxc_networking_extra_options      = undef,
+
+  # Lxc networking NAT
   $lxc_networking_nat_enable         = $lxc::params::lxc_networking_nat_enable,
   $lxc_networking_nat_bridge         = $lxc::params::lxc_networking_nat_bridge,
   $lxc_networking_nat_address        = $lxc::params::lxc_networking_nat_address,
@@ -126,16 +140,24 @@ class lxc (
   $lxc_networking_nat_dhcp_conf      = undef,
   $lxc_networking_nat_dhcp_options   = undef,
   $lxc_networking_nat_update_dnsmasq = $lxc::params::lxc_networking_nat_update_dnsmasq,
-  $lxc_networking_nat_dnsmasq_conf   = $lxc::params::lxc_networking_nat_dnsmasq_conf
-) inherits lxc::params {
+  $lxc_networking_nat_dnsmasq_conf   = $lxc::params::lxc_networking_nat_dnsmasq_conf,
 
-  contain 'lxc::install'
-  contain 'lxc::service'
-  contain 'lxc::networking::containers'
-  contain 'lxc::networking::nat'
+  # Lxc networking bridge
+  $lxc_networking_bridge_enable      = $lxc::params::lxc_networking_bridge_enable,
+  $lxc_bridge_package                = $lxc::params::lxc_bridge_package,
+  $lxc_networking_set_defaults       = $lxc::params::lxc_networking_set_defaults,
+  $lxc_network_default_conf          = $lxc::params::network_default_conf,
+) inherits ::lxc::params {
 
-  Class['lxc::install'] ->
-  Class['lxc::service'] ->
-  Class['lxc::networking::containers'] ->
-  Class['lxc::networking::nat']
+  # contain needed modules
+  contain '::lxc::package'
+  contain '::lxc::service'
+  contain '::lxc::networking'
+  contain '::lxc::template'
+
+  # class ordering
+  Class['::lxc::package'] ->
+  Class['::lxc::service'] ->
+  Class['::lxc::networking'] ->
+  Class['::lxc::template']
 }
