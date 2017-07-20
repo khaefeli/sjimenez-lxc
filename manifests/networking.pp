@@ -15,7 +15,7 @@ class lxc::networking {
   $networking_type = $lxc::lxc_networking_type
   $networking_device_link = $lxc::lxc_networking_device_link
   $networking_flags = $lxc::lxc_networking_flags
-  $networking_type = $lxc::lxc_networking_hwaddr
+  $networking_hwaddr = $lxc::lxc_networking_hwaddr
 
   # contain NAT independent bridge (masqueraded bridge)) 
   if $nat_enable {
