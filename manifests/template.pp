@@ -11,7 +11,7 @@ class lxc::template {
   $networking_type          = $lxc::lxc_networking_type
   $networking_device_link   = $lxc::lxc_networking_device_link
   $networking_flags         = $lxc::lxc_networking_flags
-  $networking_type          = $lxc::lxc_networking_hwaddr
+  $networking_hwadd         = $lxc::lxc_networking_hwaddr
   $networking_extra_options = $lxc::lxc_networking_extra_options
 
   # TODO: set other options (not only network related)
