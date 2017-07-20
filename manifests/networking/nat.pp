@@ -38,7 +38,7 @@ class lxc::networking::nat inherits lxc::params {
     content => template("${module_name}/config/lxc-net.erb"),
     notify  => Service[$lxc::params::network_nat_service],
   }
-  
+
   if $lxc::lxc_networking_nat_dhcp_conf {
     $local_lxc_networking_nat_dhcp_options = $lxc::lxc_networking_nat_dhcp_options
 

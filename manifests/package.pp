@@ -22,7 +22,7 @@ class lxc::package {
       contain ::nginx::package::debian
     }
     default: {
-     fail("${::os['family']} is not supported by ${module_name}.")
+      fail("${::os['family']} is not supported by ${module_name}.")
     }
   }
 }

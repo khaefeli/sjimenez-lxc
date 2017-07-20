@@ -12,9 +12,6 @@
 #
 class lxc::params {
 
-  
-  # Set module default params
-
   # Ruby bindings for ruby-lxc
   $lxc_ruby_bindings_provider        = gem,
   $lxc_ruby_bindings_package         = 'ruby-lxc',
@@ -48,7 +45,7 @@ class lxc::params {
   $lxc_networking_nat_max_hosts      = undef,
   $lxc_networking_nat_update_dnsmasq = false,
   $lxc_networking_nat_dnsmasq_conf   = undef,
-  
+
   # local params?
   $network_nat_conf                  = undef,
   $network_nat_service               = undef,

@@ -16,12 +16,12 @@ class lxc::networking {
   $networking_device_link = $lxc::lxc_networking_device_link
   $networking_flags = $lxc::lxc_networking_flags
   $networking_type = $lxc::lxc_networking_hwaddr
-  
+
   # contain NAT independent bridge (masqueraded bridge)) 
   if $nat_enable {
     contain '::lxc::networking::nat'
   }
-  
+
   # contain host-shared bridge
   if $bridge_enable {
     contain '::lxc::networking::bridge'
@@ -31,5 +31,4 @@ class lxc::networking {
   if empty($device_link) and empty($networking_type) {
     fail('lxc_networking_device_link and lxc_networking_type are required')
   }
-
 }
