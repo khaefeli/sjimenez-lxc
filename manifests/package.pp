@@ -16,10 +16,10 @@ class lxc::package {
   # Check for supported OS
   case $::os['family'] {
     'Ubuntu': {
-      contain ::nginx::package::ubuntu
+      contain ::lxc::package::ubuntu
     }
     'Debian': {
-      contain ::nginx::package::debian
+      contain ::lxc::package::debian
     }
     default: {
       fail("${::os['family']} is not supported by ${module_name}.")
