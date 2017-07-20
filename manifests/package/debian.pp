@@ -13,14 +13,15 @@
 class lxc::package::debian {
 
   # set the params for the local scope
-  $package_name      = $::lxc::lxc_lxc_package
-  $package_ensure    = $::lxc::lxc_lxc_version
-  $bindings_deps     = 'build-essential', 'ruby-dev', 'lxc-dev', 'libcgmanager0' #defined here for debian (only support ruby so far)
-  $bindings_ensure   = 'present' 
-  $bindings_version  = $::lxc::lxc_ruby_bindings_version 
-  $bindings_package  = $::lxc::lxc_ruby_bindings_package
-  $bindings_provider = $::lxc::lxc_ruby_bindings_provider
-  $tag               = 'lxc_packages'
+  $package_name         = $::lxc::lxc_lxc_package
+  $package_ensure       = $::lxc::lxc_lxc_version
+  $bindings_deps        = 'build-essential', 'ruby-dev', 'lxc-dev', 'libcgmanager0' #defined here for debian (only support ruby so far)
+  $bindings_ensure      = 'present' 
+  $bindings_version     = $::lxc::lxc_ruby_bindings_version 
+  $bindings_package     = $::lxc::lxc_ruby_bindings_package
+  $bindings_provider    = $::lxc::lxc_ruby_bindings_provider
+  $tag                  = 'lxc_packages'
+  $bridge_utils_package = $::lxc::lxc_bridge_package
 
   # install lxc base package
   package { 'lxc':
@@ -29,6 +30,13 @@ class lxc::package::debian {
     tag    => $tag,
     notify => Class['lxc::service'],
   }
+
+  # install bridge utils for nat / host bridge
+  package { $bridge_utils_package:
+    ensure => $bindings_ensure,
+    tag    => $tag,
+  }
+
 
   # install lxc bindings dependencies
   package { $bindings_deps:

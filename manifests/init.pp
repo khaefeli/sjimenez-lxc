@@ -143,15 +143,17 @@ class lxc (
   $lxc_networking_nat_dnsmasq_conf   = $lxc::params::lxc_networking_nat_dnsmasq_conf,
 
   # Lxc networking bridge
+  $lxc_networking_bridge_enable      = $lxc::params::lxc_networking_bridge_enable,
+  $lxc_bridge_package                = $lxc::params::lxc_bridge_package,
   $lxc_networking_set_defaults       = $lxc::params::lxc_networking_set_defaults,
 ) inherits ::lxc::params {
 
-  # TODO: only contain needed modules
-  contain 'lxc::package'
-  contain 'lxc::service'
-  contain 'lxc::networking'
+  # contain needed modules
+  contain '::lxc::package'
+  contain '::lxc::service'
+  contain '::lxc::networking'
 
-  Class['lxc::package'] ->
-  Class['lxc::service'] ->
-  Class['lxc::networking']
+  Class['::lxc::package'] ->
+  Class['::lxc::service'] ->
+  Class['::lxc::networking']
 }

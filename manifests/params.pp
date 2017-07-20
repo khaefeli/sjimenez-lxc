@@ -55,5 +55,7 @@ class lxc::params {
   $network_default_conf              = '/etc/lxc/default.conf',
 
   # Lxc networking bridge
+  $lxc_networking_bridge_enable      = true, #only enable if nat is disabled
+  $lxc_bridge_package                = 'bridge-utils', #only enable if nat is disabled
   $lxc_networking_set_defaults       = false,
 }

@@ -7,6 +7,8 @@ class lxc::networking {
   $device_link = $lxc::lxc_networking_device_link
   $networking_extra_options = $lxc::lxc_networking_extra_options
   $set_defaults = $lxc::lxc_networking_set_defaults
+  $nat_enable = $lxc::lxc_networking_nat_enable
+  $bridge_enable = $lxc::lxc_networking_bridge_enable
   $default_conf = $lxc::params::network_default_conf
 
   # set networking defaults
@@ -15,8 +17,15 @@ class lxc::networking {
   $networking_flags = $lxc::lxc_networking_flags
   $networking_type = $lxc::lxc_networking_hwaddr
   
-  # contain NAT if needed
-  # contain Bridge setup if needed
+  # contain NAT independent bridge (masqueraded bridge)) 
+  if $nat_enable {
+    contain '::lxc::networking::nat'
+  }
+  
+  # contain host-shared bridge
+  if $bridge_enable {
+    contain '::lxc::networking::bridge'
+  }
 
   # check if networking is setup
   if empty($device_link) and empty($networking_type) {
@@ -25,7 +34,7 @@ class lxc::networking {
 
   # setup default config if needed
   # TODO: move to other manifest (not only network related)
-  if $set_defaults == true {
+  if $set_defaults {
     file { $default_conf:
       ensure  => present,
       content => template("${module_name}/config/default.conf.erb"),
