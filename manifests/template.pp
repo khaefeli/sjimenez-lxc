@@ -26,4 +26,6 @@ class lxc::template {
       content => template("${module_name}/config/default.conf.erb"),
     }
   }
+
+  # TODO: manage the lxc templates
 }
