@@ -16,6 +16,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
       @container.set_config_item("lxc.network.macvlan_mode", @resource[:macvlan_mode]) unless @resource[:macvlan_mode].nil?
       @container.set_config_item("lxc.network.ipv4", @resource[:ipv4].flatten) unless @resource[:ipv4].nil?
       @container.set_config_item("lxc.network.hwaddr", @resource[:hwaddr]) unless @resource[:hwaddr].nil?
+      @container.set_config_item("lxc.network.flags", @resource[:flags]) unless @resource[:flags].nil?
       @container.save_config
       restart if @resource[:restart]
       true
@@ -285,6 +286,30 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
       define_container
       @container.clear_config_item("lxc.network.hwaddr")
       @container.set_config_item("lxc.network.hwaddr",value)
+      @container.save_config
+      restart if @resource[:restart]
+      true
+    rescue LXC::Error
+      false
+    end
+  end
+  
+  def flags
+    begin
+      define_container
+      @container.config_item("lxc.network.flags")
+    rescue LXC::Error
+      # TODO: might be better to fail here instead of returning empty string which
+      # would trigger the setter
+      ""
+    end
+  end
+
+  def flags=(value)
+    begin
+      define_container
+      @container.clear_config_item("lxc.network.flags")
+      @container.set_config_item("lxc.network.flags",value)
       @container.save_config
       restart if @resource[:restart]
       true
