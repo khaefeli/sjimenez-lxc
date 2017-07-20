@@ -34,6 +34,15 @@ Puppet::Type.newtype(:lxc_interface) do
     newvalues(/\d+/)
   end
 
+  newproperty(:flags) do
+    desc 'flag to set network device up or down'
+    validate do |value|
+        unless ['up','down'].include?value
+          raise ArgumentError, "%s is not a valid flag" % value
+        end
+      end
+  end
+
   newproperty(:macvlan_mode) do
     desc 'macvlan mode'
     validate do |value|

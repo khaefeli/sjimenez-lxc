@@ -4,18 +4,18 @@
 #
 class lxc::networking {
 
-  $device_link = $lxc::lxc_networking_device_link
-  $networking_extra_options = $lxc::lxc_networking_extra_options
-  $set_defaults = $lxc::lxc_networking_set_defaults
-  $nat_enable = $lxc::lxc_networking_nat_enable
-  $bridge_enable = $lxc::lxc_networking_bridge_enable
-  $default_conf = $lxc::params::network_default_conf
+  $device_link            = $lxc::lxc_networking_device_link
+  $extra_options          = $lxc::lxc_networking_extra_options
+  $set_defaults           = $lxc::lxc_networking_set_defaults
+  $nat_enable             = $lxc::lxc_networking_nat_enable
+  $bridge_enable          = $lxc::lxc_networking_bridge_enable
+  $default_conf           = $lxc::params::network_default_conf
 
   # set networking defaults
-  $networking_type = $lxc::lxc_networking_type
+  $networking_type        = $lxc::lxc_networking_type
   $networking_device_link = $lxc::lxc_networking_device_link
-  $networking_flags = $lxc::lxc_networking_flags
-  $networking_hwaddr = $lxc::lxc_networking_hwaddr
+  $networking_flags       = $lxc::lxc_networking_flags
+  $networking_hwaddr      = $lxc::lxc_networking_hwaddr
 
   # contain NAT independent bridge (masqueraded bridge)) 
   if $nat_enable {

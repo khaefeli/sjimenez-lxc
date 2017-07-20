@@ -1,3 +1,4 @@
+
 Puppet::Type.type(:lxc_interface).provide(:interface) do
 
   defaultfor :operatingsystem => :ubuntu
@@ -16,10 +17,12 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
       @container.set_config_item("lxc.network.macvlan_mode", @resource[:macvlan_mode]) unless @resource[:macvlan_mode].nil?
       @container.set_config_item("lxc.network.ipv4", @resource[:ipv4].flatten) unless @resource[:ipv4].nil?
       @container.set_config_item("lxc.network.hwaddr", @resource[:hwaddr]) unless @resource[:hwaddr].nil?
+      @container.set_config_item("lxc.network.flags", @resource[:flags]) unless @resource[:flags].nil?
       @container.save_config
       restart if @resource[:restart]
       true
-    rescue LXC::Error
+    rescue LXC::Error => e
+      fail("Failed to add #{@resource[:name]}: #{e.message}")
       false
     end
   end
@@ -269,6 +272,31 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
     end
   end
 
+  def flags
+    begin
+    debug("[flags]")
+      define_container
+      @container.config_item("lxc.network.flags")
+    rescue LXC::Error
+      # TODO: might be better to fail here instead of returning empty string which
+    end
+  end
+
+  def flags=(value)
+    begin
+    debug("[flags]")
+      define_container
+      @container.clear_config_item("lxc.network.flags")
+      @container.set_config_item("lxc.network.flags",value)
+      @container.save_config
+      restart if @resource[:restart]
+      true
+    rescue LXC::Error
+      Puppet.info("testing errors")
+      false
+    end
+  end 
+
   def hwaddr
     begin
       define_container
@@ -292,7 +320,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
       false
     end
   end
-
+  
   private
   def define_container
     unless @container
@@ -307,3 +335,4 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
     @container.wait(:running, 10)
   end
 end
+
