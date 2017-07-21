@@ -50,7 +50,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
 
   # getters and setters
 
-  deource[:index]} device_name
+  def device_name
     begin
       define_container
       @container.config_item("lxc.network.#{@resource[:index]}.name")
@@ -117,7 +117,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
         puts "This might be a bug in lxc_clear_nic only expecting .ipv4 and .ipv6 entries.\n"
         puts "LXC <1.1 is known to be affected. Please make sure nothing else went wrong.\n"
       end
-      @container.set_config_item("lxc.network.veth.pair",value)
+      @container.set_config_item("lxc.network.#{@resource[:index]}.veth.pair",value)
       @container.save_config
       restart if @resource[:restart]
       true
