@@ -9,15 +9,15 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def create
     begin
       define_container
-      @container.set_config_item("lxc.network.type", @resource[:type])
-      @container.set_config_item("lxc.network.name", @resource[:device_name])
-      @container.set_config_item("lxc.network.link", @resource[:link]) unless @resource[:link].nil?
-      @container.set_config_item("lxc.network.veth.pair", @resource[:veth_name_host]) unless @resource[:veth_name_host].nil?
-      @container.set_config_item("lxc.network.vlan_id", @resource[:vlan_id]) unless @resource[:vlan_id].nil?
-      @container.set_config_item("lxc.network.macvlan_mode", @resource[:macvlan_mode]) unless @resource[:macvlan_mode].nil?
-      @container.set_config_item("lxc.network.ipv4", @resource[:ipv4].flatten) unless @resource[:ipv4].nil?
-      @container.set_config_item("lxc.network.hwaddr", @resource[:hwaddr]) unless @resource[:hwaddr].nil?
-      @container.set_config_item("lxc.network.flags", @resource[:flags]) unless @resource[:flags].nil?
+      @container.set_config_item("lxc.network.#{@resource[:index]}.type", @resource[:type])
+      @container.set_config_item("lxc.network.#{@resource[:index]}.name", @resource[:device_name])
+      @container.set_config_item("lxc.network.#{@resource[:index]}.link", @resource[:link]) unless @resource[:link].nil?
+      @container.set_config_item("lxc.network.#{@resource[:index]}.veth.pair", @resource[:veth_name_host]) unless @resource[:veth_name_host].nil?
+      @container.set_config_item("lxc.network.#{@resource[:index]}.vlan_id", @resource[:vlan_id]) unless @resource[:vlan_id].nil?
+      @container.set_config_item("lxc.network.#{@resource[:index]}.macvlan_mode", @resource[:macvlan_mode]) unless @resource[:macvlan_mode].nil?
+      @container.set_config_item("lxc.network.#{@resource[:index]}.ipv4", @resource[:ipv4].flatten) unless @resource[:ipv4].nil?
+      @container.set_config_item("lxc.network.#{@resource[:index]}.hwaddr", @resource[:hwaddr]) unless @resource[:hwaddr].nil?
+      @container.set_config_item("lxc.network.#{@resource[:index]}.flags", @resource[:flags]) unless @resource[:flags].nil?
       @container.save_config
       restart if @resource[:restart]
       true
@@ -30,7 +30,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def exists?
     begin
       define_container
-      @container.keys("lxc.network")
+      @container.keys("lxc.network.#{@resource[:index]}")
       true
     rescue LXC::Error
       false
@@ -40,7 +40,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def destroy
     begin
       define_container
-      @container.clear_config_item("lxc.network")
+      @container.clear_config_item("lxc.network.#{@resource[:index]}")
       @container.save_config
       true
     rescue LXC::Error
@@ -50,10 +50,10 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
 
   # getters and setters
 
-  def device_name
+  deource[:index]} device_name
     begin
       define_container
-      @container.config_item("lxc.network.name")
+      @container.config_item("lxc.network.#{@resource[:index]}.name")
     rescue LXC::Error
       ""
     end
@@ -62,8 +62,8 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def device_name=(value)
     begin
       define_container
-      @container.clear_config_item("lxc.network.name")
-      @container.set_config_item("lxc.network.name",value)
+      @container.clear_config_item("lxc.network.#{@resource[:index]}.name")
+      @container.set_config_item("lxc.network.#{@resource[:index]}.name",value)
       @container.save_config
       restart if @resource[:restart]
       true
@@ -75,7 +75,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def link
     begin
       define_container
-      @container.config_item("lxc.network.link")
+      @container.config_item("lxc.network.#{@resource[:index]}.link")
     rescue LXC::Error
       # TODO: might be better to fail here instead of returning empty string which
       # would trigger the setter
@@ -86,8 +86,8 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def link=(value)
     begin
       define_container
-      @container.clear_config_item("lxc.network.link")
-      @container.set_config_item("lxc.network.link",value)
+      @container.clear_config_item("lxc.network.#{@resource[:index]}.link")
+      @container.set_config_item("lxc.network.#{@resource[:index]}.link",value)
       @container.save_config
       restart if @resource[:restart]
       true
@@ -99,7 +99,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def veth_name_host
     begin
       define_container
-      @container.config_item("lxc.network.veth.pair")
+      @container.config_item("lxc.network.#{@resource[:index]}.veth.pair")
     rescue LXC::Error
       # TODO: might be better to fail here instead of returning empty string which
       # would trigger the setter
@@ -111,7 +111,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
     begin
       define_container
       begin
-        @container.clear_config_item("lxc.network.veth.pair")
+        @container.clear_config_item("lxc.network.#{@resource[:index]}.veth.pair")
       rescue LXC::Error
         puts "Warning: clear_config_item for lxc.network.veth.pair failed.\n"
         puts "This might be a bug in lxc_clear_nic only expecting .ipv4 and .ipv6 entries.\n"
@@ -129,7 +129,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def vlan_id
     begin
       define_container
-      @container.config_item("lxc.network.vlan_id")
+      @container.config_item("lxc.network.#{@resource[:index]}.vlan_id")
     rescue LXC::Error
       # TODO: might be better to fail here instead of returning empty string which
       # would trigger the setter
@@ -140,8 +140,8 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def vlan_id=(value)
     begin
       define_container
-      @container.clear_config_item("lxc.network.vlan_id")
-      @container.set_config_item("lxc.network.vlan_id",value)
+      @container.clear_config_item("lxc.network.#{@resource[:index]}.vlan_id")
+      @container.set_config_item("lxc.network.#{@resource[:index]}.vlan_id",value)
       @container.save_config
       restart if @resource[:restart]
       true
@@ -153,7 +153,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def macvlan_mode
     begin
       define_container
-      @container.config_item("lxc.network.macvlan_mode")
+      @container.config_item("lxc.network.#{@resource[:index]}.macvlan_mode")
     rescue LXC::Error
       # TODO: might be better to fail here instead of returning empty string which
       # would trigger the setter
@@ -164,8 +164,8 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def macvlan_mode=(value)
     begin
       define_container
-      @container.clear_config_item("lxc.network.macvlan_mode")
-      @container.set_config_item("lxc.network.macvlan_mode",value)
+      @container.clear_config_item("lxc.network.#{@resource[:index]}.macvlan_mode")
+      @container.set_config_item("lxc.network.#{@resource[:index]}.macvlan_mode",value)
       @container.save_config
       restart if @resource[:restart]
       true
@@ -177,7 +177,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def type
     begin
       define_container
-      @container.config_item("lxc.network.type")
+      @container.config_item("lxc.network.#{@resource[:index]}.type")
     rescue LXC::Error
       # TODO: might be better to fail here instead of returning empty string which
       # would trigger the setter
@@ -188,8 +188,8 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def type=(value)
     begin
       define_container
-      @container.clear_config_item("lxc.network.type")
-      @container.set_config_item("lxc.network.type",value)
+      @container.clear_config_item("lxc.network.#{@resource[:index]}.type")
+      @container.set_config_item("lxc.network.#{@resource[:index]}.type",value)
       @container.save_config
       restart if @resource[:restart]
       true
@@ -228,7 +228,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
         aux = ips.select { |b| b =~ /lxc.network.ipv4 =/ }
         aux.collect { |m| m.split('=').last.strip }
       else
-        @container.config_item("lxc.network.ipv4").first
+        @container.config_item("lxc.network.#{@resource[:index]}.ipv4").first
       end
     rescue StandardError
       # TODO: might be better to fail here instead of returning empty string which
@@ -240,9 +240,9 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def ipv4=(value)
     begin
       define_container
-      @container.clear_config_item("lxc.network.ipv4")
+      @container.clear_config_item("lxc.network.#{@resource[:index]}.ipv4")
       # Why does it get an arrays of arrays?
-      @container.set_config_item("lxc.network.ipv4",value.flatten)
+      @container.set_config_item("lxc.network.#{@resource[:index]}.ipv4",value.flatten)
       @container.save_config
       restart if @resource[:restart]
       true
@@ -254,7 +254,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def ipv4_gateway
     begin
       define_container
-      @container.config_item("lxc.network.ipv4.gateway")
+      @container.config_item("lxc.network.#{@resource[:index]}.ipv4.gateway")
     rescue LXC::Error
       ""
     end
@@ -263,7 +263,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def ipv4_gateway=(value)
     begin
       define_container
-      @container.set_config_item("lxc.network.ipv4.gateway",value)
+      @container.set_config_item("lxc.network.#{@resource[:index]}.ipv4.gateway",value)
       @container.save_config
       restart if @resource[:restart]
       true
@@ -276,7 +276,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
     begin
     debug("[flags]")
       define_container
-      @container.config_item("lxc.network.flags")
+      @container.config_item("lxc.network.#{@resource[:index]}.flags")
     rescue LXC::Error
       # TODO: might be better to fail here instead of returning empty string which
     end
@@ -286,8 +286,8 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
     begin
     debug("[flags]")
       define_container
-      @container.clear_config_item("lxc.network.flags")
-      @container.set_config_item("lxc.network.flags",value)
+      @container.clear_config_item("lxc.network.#{@resource[:index]}.flags")
+      @container.set_config_item("lxc.network.#{@resource[:index]}.flags",value)
       @container.save_config
       restart if @resource[:restart]
       true
@@ -300,7 +300,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def hwaddr
     begin
       define_container
-      @container.config_item("lxc.network.hwaddr")
+      @container.config_item("lxc.network.#{@resource[:index]}.hwaddr")
     rescue LXC::Error
       # TODO: might be better to fail here instead of returning empty string which
       # would trigger the setter
@@ -311,8 +311,8 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def hwaddr=(value)
     begin
       define_container
-      @container.clear_config_item("lxc.network.hwaddr")
-      @container.set_config_item("lxc.network.hwaddr",value)
+      @container.clear_config_item("lxc.network.#{@resource[:index]}.hwaddr")
+      @container.set_config_item("lxc.network.#{@resource[:index]}.hwaddr",value)
       @container.save_config
       restart if @resource[:restart]
       true
