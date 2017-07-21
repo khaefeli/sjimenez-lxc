@@ -22,6 +22,12 @@
 # [*lxc_lxc_version*]
 #   Version for $lxc_lxc_package. Defaults to latest.
 #
+# [*lxc_lxcfs_package*]
+#   Package for installing lxcfs for consumption reporting inside your container. Defaults to lxcfs.
+#
+# [*lxc_lxcfs_version*]
+#   Version for $lxc_lxcfs_package. Defaults to latest.
+#
 # [*lxc_lxc_service*]
 #   Name for lxc service. Defaults to lxc.
 #
@@ -112,6 +118,8 @@ class lxc (
   # Lxc packages / service
   $lxc_lxc_package                   = $lxc::params::lxc_lxc_package,
   $lxc_lxc_version                   = $lxc::params::lxc_lxc_version,
+  $lxc_lxcfs_package                 = $lxc::params::lxc_lxcfs_package,
+  $lxc_lxcfs_version                 = $lxc::params::lxc_lxcfs_version,
   $lxc_lxc_service                   = $lxc::params::lxc_lxc_service,
   $lxc_lxc_service_ensure            = $lxc::params::lxc_lxc_service_ensure,
   $lxc_lxc_service_enabled           = $lxc::params::lxc_lxc_service_enabled,

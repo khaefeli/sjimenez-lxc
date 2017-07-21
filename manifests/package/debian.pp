@@ -13,8 +13,10 @@
 class lxc::package::debian {
 
   # set the params for the local scope
-  $package_name         = $::lxc::lxc_lxc_package
-  $package_ensure       = $::lxc::lxc_lxc_version
+  $lxc_package_name     = $::lxc::lxc_lxc_package
+  $lxc_package_ensure   = $::lxc::lxc_lxc_version
+  $lxcfs_package_name   = $::lxc::lxc_lxcfs_package
+  $lxcfs_package_ensure = $::lxc::lxc_lxcfs_version
   $bindings_deps        = ['build-essential', 'ruby-dev', 'lxc-dev', 'libcgmanager0'] #defined here for debian (only support ruby so far)
   $bindings_ensure      = 'present'
   $bindings_version     = $::lxc::lxc_ruby_bindings_version
@@ -27,6 +29,14 @@ class lxc::package::debian {
   package { 'lxc':
     ensure => $package_ensure,
     name   => $package_name,
+    tag    => $tag,
+    notify => Class['lxc::service'],
+  } ->
+
+  # install lxcfs for monitoring and proper resource consumption reporting
+  package { 'lxcfs':
+    ensure => $lxcfs_package_ensure,
+    name   => $lxcfs_package_name,
     tag    => $tag,
     notify => Class['lxc::service'],
   }
