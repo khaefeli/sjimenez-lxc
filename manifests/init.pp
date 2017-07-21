@@ -124,11 +124,6 @@ class lxc (
   $lxc_lxc_service_ensure            = $lxc::params::lxc_lxc_service_ensure,
   $lxc_lxc_service_enabled           = $lxc::params::lxc_lxc_service_enabled,
 
-  # Cgmanager
-  $lxc_cgmanager_service             = $lxc::params::lxc_cgmanager_service,
-  $lxc_cgmanager_service_ensure      = $lxc::params::lxc_cgmanager_service_ensure,
-  $lxc_cgmanager_service_enabled     = $lxc::params::lxc_cgmanager_service_enabled,
-
   # Lxc networking basics
   $lxc_networking_device_link        = $lxc::params::lxc_networking_device_link,
   $lxc_networking_type               = $lxc::params::lxc_networking_type,

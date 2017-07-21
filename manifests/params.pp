@@ -26,11 +26,6 @@ class lxc::params {
   $lxc_lxc_service_ensure            = running
   $lxc_lxc_service_enabled           = true
 
-  # Cgmanager
-  $lxc_cgmanager_service             = 'cgmanager'
-  $lxc_cgmanager_service_ensure      = running
-  $lxc_cgmanager_service_enabled     = true
-
   # Lxc networking basics
   $lxc_networking_device_link        = 'br0'
   $lxc_networking_type               = 'veth'
