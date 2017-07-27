@@ -17,6 +17,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
       @container.set_config_item("lxc.network.#{@resource[:index]}.vlan_id", @resource[:vlan_id]) unless @resource[:vlan_id].nil?
       @container.set_config_item("lxc.network.#{@resource[:index]}.macvlan_mode", @resource[:macvlan_mode]) unless @resource[:macvlan_mode].nil?
       @container.set_config_item("lxc.network.#{@resource[:index]}.ipv4", @resource[:ipv4].flatten) unless @resource[:ipv4].nil?
+      @container.set_config_item("lxc.network.#{@resource[:index]}.ipv4.gateway", @resource[:ipv4_gateway]) unless @resource[:ipv4_gateway].nil?
       @container.set_config_item("lxc.network.#{@resource[:index]}.hwaddr", @resource[:hwaddr]) unless @resource[:hwaddr].nil?
       @container.set_config_item("lxc.network.#{@resource[:index]}.flags", @resource[:flags]) unless @resource[:flags].nil?
       @container.save_config
@@ -119,7 +120,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
         puts "This might be a bug in lxc_clear_nic only expecting .ipv4 and .ipv6 entries.\n"
         puts "LXC <1.1 is known to be affected. Please make sure nothing else went wrong.\n"
       end
-      @container.set_config_item("lxc.network.veth.pair",value)
+      @container.set_config_item("lxc.network.#{@resource[:index]}.veth.pair",value)
       @container.save_config
       restart if @resource[:restart]
       true
@@ -228,7 +229,7 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def ipv4_gateway=(value)
     begin
       define_container
-      # why no clear config here?
+      @container.clear_config_item("lxc.network.#{@resource[:index]}.ipv4.gateway")
       @container.set_config_item("lxc.network.#{@resource[:index]}.ipv4.gateway",value)
       @container.save_config
       restart if @resource[:restart]
