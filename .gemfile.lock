@@ -253,7 +253,7 @@ GEM
       rspec
     rspec-support (3.3.0)
     rsync (1.0.9)
-    ruby-lxc (1.2.0)
+    ruby-lxc (1.2.2)
     serverspec (2.24.1)
       multi_json
       rspec (~> 3.0)
