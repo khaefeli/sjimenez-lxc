@@ -32,15 +32,18 @@ Puppet::Type.type(:lxc_interface).provide(:interface) do
   def exists?
     begin
       define_container
-      devicename = @container.config_item("lxc.network.#{@resource[:index]}.name")
-      if devicename.to_s.empty?
-        false #return false to start interface creation (see def create) 
+      # check the ruby-lxc binding for the network key
+      # if interface exists, lxc api returns a list of valid
+      # config options, if the interface doesn't exists:
+      # results in a lxc error "key not valid"
+      interface_keys = @container.keys("lxc.network.#{@resource[:index]}")
+      if interface_keys.to_s.empty?
+        false #return false to start interface creation (see "def create") 
       else
         true #the interface exists. trigger the getter and setters for the resource params
       end
     rescue LXC::Error => e
-      fail("Failed to check if interface exists #{@resource[:index]}.name: #{e.message}")
-      false
+      #TOOD: filter normal "key not exists" and only output unexpected errors
     end
   end
 
