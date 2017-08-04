@@ -1,7 +1,7 @@
 # Generate MAC addresses based on the results of fqdn_rand. Useful for
 # generating repeatable MAC addresses for e.g. VMs.
 # Inspired by https://github.com/Yelp/puppet-netstdlib
-# Migrated to Puppet5 and improved by Kevin Häfeli
+# Migrated to Puppet5 and improved by Kevin Haefeli
 # Example:
 #   fqdn_mac("52:54:00", "guest-1")
 #   > "52:54:00:12:09:f3"
@@ -10,9 +10,7 @@ Puppet::Functions.create_function(:'fqdn_mac') do
 
   # validate the input
   dispatch :mac_prefix do
-    #param 'Pattern[/^[0-9a-f]{2}(:[0-9a-f]{2}){0,4}$]', :mac_match
-
-    param 'String', :mac_match
+    param 'Pattern[/^[0-9a-f]{2}(:[0-9a-f]{2}){0,4}$/]', :mac_match
     optional_param 'String', :randomizer
   end
 
