@@ -70,15 +70,6 @@ Puppet::Type.type(:lxc_cgroups).provide(:cgroups) do
     end
   end 
 
-
-  private
-  def define_container
-    unless @container
-      @container = LXC::Container.new(@resource[:container])
-    end
-  end
-end
-
   private
   def define_container
     unless @container
