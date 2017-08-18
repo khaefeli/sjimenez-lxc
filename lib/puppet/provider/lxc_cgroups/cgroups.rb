@@ -38,17 +38,17 @@ Puppet::Type.type(:lxc_cgroups).provide(:cgroups) do
     begin
       @container.cgroup_item("memory.limit_in_bytes")
     rescue LXC::Error => e
-      fail("Failed to get flags: #{e.message}")
+      fail("Failed to get memory: #{e.message}")
     end
   end
   
   def memory=(value)
     begin
       define_container
-      @container.set_cgroup_item("memory.limit_in_bytes", @resource[:memory])
+      @container.set_cgroup_item("memory.limit_in_bytes", value)
       @container.save_config
     rescue LXC::Error => e
-      fail("Failed to set flags: #{e.message}")
+      fail("Failed to set memory: #{e.message}")
     end
   end 
 
@@ -56,17 +56,17 @@ Puppet::Type.type(:lxc_cgroups).provide(:cgroups) do
     begin
       @container.cgroup_item("cpuset.cpus")
     rescue LXC::Error => e
-      fail("Failed to get flags: #{e.message}")
+      fail("Failed to get cpuset: #{e.message}")
     end
   end
   
   def cpuset=(value)
     begin
       define_container
-      @container.set_cgroup_item("cpuset.cpus", @resource[:cpuset])
+      @container.set_cgroup_item("cpuset.cpus", value)
       @container.save_config
     rescue LXC::Error => e
-      fail("Failed to set flags: #{e.message}")
+      fail("Failed to set cpuset: #{e.message}")
     end
   end 
 
