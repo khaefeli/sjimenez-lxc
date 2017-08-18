@@ -1,6 +1,8 @@
 Puppet::Type.newtype(:lxc_cgroups) do
   @doc = 'LXC cgroups manages container limits'
 
+  ensurable
+
   newproperty(:value) do
     desc 'Value for limit'
     validate do |value|
@@ -19,14 +21,19 @@ Puppet::Type.newtype(:lxc_cgroups) do
     end
   end
 
+  # regex from https://github.com/claudyus/LXC-Web-Panel/blob/master/lwp/utils.py  
+  newproperty(:memory) do
+    desc 'memory limit in bytes'
+    newvalues(/^([0-9]+|)$/)
+  end
+
+  newproperty(:cpuset) do
+    desc 'cpusets to assign cpucores'
+    newvalues(/^[0-9,-]+$/)
+  end
+  
   newparam(:name, :namevar => true) do
-    desc 'Cgroup limit name'
-    validate do |value|
-      controller = value.split('.').first
-      unless ['cpuset','cpu','cpuacct','memory','devices','freezer','net_cls','blkio','perf_event','net_prio','hugetlb'].member?controller
-        raise ArgumentError, "Wrong controller: #{controller}"
-      end
-    end
+    desc 'Just a name'
   end
 
   autorequire(:lxc) do
