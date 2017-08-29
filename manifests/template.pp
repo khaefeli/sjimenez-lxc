@@ -4,7 +4,7 @@
 # and lxc default settings for container creation
 #
 class lxc::template {
-  $set_defaults             = $lxc::lxc_set_defaults
+  $set_defaults             = $lxc::lxc_networking_set_defaults
   $default_conf             = $lxc::network_default_conf
 
   # set networking defaults
@@ -28,4 +28,6 @@ class lxc::template {
   }
 
   # TODO: manage the lxc templates
+  # for now: manage it in your profile 
+
 }

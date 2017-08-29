@@ -27,8 +27,8 @@ class lxc::package::debian {
 
   # install lxc base package
   package { 'lxc':
-    ensure => $package_ensure,
-    name   => $package_name,
+    ensure => $lxc_package_ensure,
+    name   => $lxc_package_name,
     tag    => $tag,
     notify => Class['lxc::service'],
   } ->
