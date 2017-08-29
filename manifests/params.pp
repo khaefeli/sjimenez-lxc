@@ -13,9 +13,10 @@
 class lxc::params {
 
   # Ruby bindings for ruby-lxc
-  $lxc_ruby_bindings_provider        = 'gem'
+  $lxc_ruby_bindings_provider        = 'puppet_gem'
   $lxc_ruby_bindings_package         = 'ruby-lxc'
   $lxc_ruby_bindings_version         = '1.2.2'
+  $lxc_ruby_bindings_gem_deps        = undef #set os specific
 
   # Lxc packages / service
   $lxc_lxc_package                   = 'lxc'
