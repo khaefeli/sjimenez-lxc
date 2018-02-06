@@ -24,34 +24,39 @@ class lxc::package::debian {
   $bindings_provider    = $::lxc::lxc_ruby_bindings_provider
   $tag                  = 'lxc_packages'
   $bridge_utils_package = $::lxc::lxc_bridge_package
+  $install_options       =  ['-t', 'jessie-backports']
 
   # install lxc base package
   package { 'lxc':
-    ensure => $lxc_package_ensure,
-    name   => $lxc_package_name,
-    tag    => $tag,
-    notify => Class['lxc::service'],
+    ensure          => $lxc_package_ensure,
+    name            => $lxc_package_name,
+    tag             => $tag,
+    notify          => Class['lxc::service'],
+    install_options => $install_options,
   } ->
 
   # install lxcfs for monitoring and proper resource consumption reporting
   package { 'lxcfs':
-    ensure => $lxcfs_package_ensure,
-    name   => $lxcfs_package_name,
-    tag    => $tag,
-    notify => Class['lxc::service'],
+    ensure          => $lxcfs_package_ensure,
+    name            => $lxcfs_package_name,
+    tag             => $tag,
+    notify          => Class['lxc::service'],
+    install_options => $install_options,
   }
 
   # install bridge utils for nat / host bridge
   package { $bridge_utils_package:
-    ensure => $bindings_ensure,
-    tag    => $tag,
+    ensure          => $bindings_ensure,
+    tag             => $tag,
+    install_options => $install_options,
   }
 
 
   # install lxc bindings dependencies
   package { $bindings_deps:
-    ensure => $bindings_ensure,
-    tag    => $tag,
+    ensure          => $bindings_ensure,
+    tag             => $tag,
+    install_options => $install_options,
   }
 
   # install the ruby-lxc module for the lxc provider 
