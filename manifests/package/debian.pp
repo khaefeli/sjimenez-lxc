@@ -13,23 +13,34 @@
 class lxc::package::debian {
 
   # set the params for the local scope
-  $lxc_package_name     = $::lxc::lxc_lxc_package
-  $lxc_package_ensure   = $::lxc::lxc_lxc_version
-  $lxcfs_package_name   = $::lxc::lxc_lxcfs_package
-  $lxcfs_package_ensure = $::lxc::lxc_lxcfs_version
-  $bindings_deps        = ['build-essential', 'ruby-dev', 'lxc-dev', 'libcgmanager0'] #defined here for debian (only support ruby so far)
-  $bindings_ensure      = 'present'
-  $bindings_version     = $::lxc::lxc_ruby_bindings_version
-  $bindings_package     = $::lxc::lxc_ruby_bindings_package
-  $bindings_provider    = $::lxc::lxc_ruby_bindings_provider
-  $tag                  = 'lxc_packages'
-  $bridge_utils_package = $::lxc::lxc_bridge_package
-  $install_options       =  ['-t', 'jessie-backports']
+  $lxc_package_name        = $::lxc::lxc_lxc_package
+  $lxc_package_ensure      = $::lxc::lxc_lxc_version
+  $lxc_package_deps_name   = $::lxc::lxc_lxc_package_deps
+  $lxc_package_deps_ensure = $::lxc::lxc_lxc_version_deps
+  $lxcfs_package_name      = $::lxc::lxc_lxcfs_package
+  $lxcfs_package_ensure    = $::lxc::lxc_lxcfs_version
+  $bindings_deps           = ['build-essential', 'ruby-dev', 'lxc-dev', 'libcgmanager0'] #defined here for debian (only support ruby so far)
+  $bindings_ensure         = 'present'
+  $bindings_version        = $::lxc::lxc_ruby_bindings_version
+  $bindings_package        = $::lxc::lxc_ruby_bindings_package
+  $bindings_provider       = $::lxc::lxc_ruby_bindings_provider
+  $tag                     = 'lxc_packages'
+  $bridge_utils_package    = $::lxc::lxc_bridge_package
+  $install_options         =  ['-t', 'jessie-backports']
 
   # install lxc base package
   package { 'lxc':
     ensure          => $lxc_package_ensure,
     name            => $lxc_package_name,
+    tag             => $tag,
+    notify          => Class['lxc::service'],
+    install_options => $install_options,
+  } ->
+
+  # install lxc dependencies
+  package { $lxc_package_deps_name:
+    ensure          => $lxc_package_deps_ensure,
+    name            => $lxc_package_deps_name,
     tag             => $tag,
     notify          => Class['lxc::service'],
     install_options => $install_options,

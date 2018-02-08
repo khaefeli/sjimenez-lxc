@@ -19,10 +19,12 @@ class lxc::params {
   $lxc_ruby_bindings_gem_deps        = undef #set os specific
 
   # Lxc packages / service
-  $lxc_lxc_package                   = ['lxc', 'libvirt-bin']
-  $lxc_lxc_version                   = latest
+  $lxc_lxc_package                   = lxc
+  $lxc_lxc_package_deps              = libvirt-bin
+  $lxc_lxc_version                   = present
+  $lxc_lxc_version_deps              = present
   $lxc_lxcfs_package                 = 'lxcfs'
-  $lxc_lxcfs_version                 = latest
+  $lxc_lxcfs_version                 = present
   $lxc_lxc_service                   = 'lxc'
   $lxc_lxc_service_ensure            = running
   $lxc_lxc_service_enabled           = true
