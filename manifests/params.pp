@@ -17,6 +17,7 @@ class lxc::params {
   $lxc_ruby_bindings_package         = 'ruby-lxc'
   $lxc_ruby_bindings_version         = '1.2.2'
   $lxc_ruby_bindings_gem_deps        = undef #set os specific
+  $lxc_ruby_bindings_proxy           = undef
 
   # Lxc packages / service
   $lxc_lxc_package                   = lxc
