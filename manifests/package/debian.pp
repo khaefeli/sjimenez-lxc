@@ -24,6 +24,7 @@ class lxc::package::debian {
   $bindings_version        = $::lxc::lxc_ruby_bindings_version
   $bindings_package        = $::lxc::lxc_ruby_bindings_package
   $bindings_provider       = $::lxc::lxc_ruby_bindings_provider
+  $bindings_proxy          = $::lxc::lxc_ruby_bindings_proxy
   $tag                     = 'lxc_packages'
   $bridge_utils_package    = $::lxc::lxc_bridge_package
   $install_options         =  ['-t', 'jessie-backports']
@@ -70,14 +71,22 @@ class lxc::package::debian {
     install_options => $install_options,
   }
 
+  # set proxy if available
+  $install_options = $bindings_proxy ? {
+    String => "[{"--http-proxy" => "${bindings_proxy"}]",
+    Array  => $bindings_proxy,
+    undef  => undef,
+  }
+
   # install the ruby-lxc module for the lxc provider 
   # See more: https://github.com/lxc/ruby-lxc
   # TODO: Support Go, phyton and other bindings
   # Go: https://github.com/lxc/go-lxc
   package { 'lxc-bindings':
-    ensure   => $bindings_version,
-    name     => $bindings_package,
-    provider => $bindings_provider,
-    require  => Package['lxc', $bindings_deps],
+    ensure          => $bindings_version,
+    name            => $bindings_package,
+    provider        => $bindings_provider,
+    install_options => $bindings_proxy,
+    require         => Package['lxc', $bindings_deps],
   }
 }
