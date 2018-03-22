@@ -65,7 +65,7 @@ class lxc::package::debian {
 
   # set proxy if available
   $install_opts = $bindings_proxy ? {
-    String => "[{"--http-proxy" => "${bindings_proxy}"]",
+    String => '[{"--http-proxy" => "${bindings_proxy}"]',
     Array  => $bindings_proxy,
     undef  => undef,
   }
