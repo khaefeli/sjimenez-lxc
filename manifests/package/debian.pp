@@ -62,19 +62,20 @@ class lxc::package::debian {
     tag             => $tag,
     install_options => $install_options,
   }
-
-  # set proxy if available
-  $install_opts = $bindings_proxy ? {
-    String => '[{"--http-proxy" => "${bindings_proxy}"]',
-    Array  => $bindings_proxy,
-    undef  => undef,
-  }
-
+  
   # install lxc bindings dependencies
   package { $bindings_deps:
     ensure          => $bindings_ensure,
     tag             => $tag,
-    install_options => $install_opts,
+    install_options => $install_options,
+  }
+
+
+  # set proxy if available
+  $install_opts = $bindings_proxy ? {
+    String => ['--http-proxy', $bindings_proxy],
+    Array  => $bindings_proxy,
+    undef  => undef,
   }
 
   # install the ruby-lxc module for the lxc provider 
@@ -85,7 +86,7 @@ class lxc::package::debian {
     ensure          => $bindings_version,
     name            => $bindings_package,
     provider        => $bindings_provider,
-    install_options => $bindings_proxy,
+    install_options => $install_opts,
     require         => Package['lxc', $bindings_deps],
   }
 }
