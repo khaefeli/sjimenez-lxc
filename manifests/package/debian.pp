@@ -27,7 +27,10 @@ class lxc::package::debian {
   $bindings_proxy          = $::lxc::lxc_ruby_bindings_proxy
   $tag                     = 'lxc_packages'
   $bridge_utils_package    = $::lxc::lxc_bridge_package
-  $install_options         =  ['-t', 'jessie-backports']
+  $install_options         =  $::os['distro']['codename'] ? {
+    jessie  => ['-t', 'jessie-backports'],
+    default => undef,
+  }
 
   # install lxc base package
   package { 'lxc':
