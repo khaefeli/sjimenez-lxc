@@ -21,7 +21,10 @@ class lxc::params {
 
   # Lxc packages / service
   $lxc_lxc_package                   = lxc
-  $lxc_lxc_package_deps              = libvirt-bin
+  $lxc_lxc_package_deps              = $::os['distro']['codename'] ? {
+     default => 'libvirt-bin',
+     stretch => undef,
+   }
   $lxc_lxc_version                   = present
   $lxc_lxc_version_deps              = present
   $lxc_lxcfs_package                 = 'lxcfs'
