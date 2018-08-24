@@ -39,7 +39,7 @@ class lxc::package::debian {
     tag             => $tag,
     notify          => Class['lxc::service'],
     install_options => $install_options,
-  } ->
+  }
 
   # install lxc dependencies
   if $lxc_package_deps_name{
@@ -50,7 +50,7 @@ class lxc::package::debian {
       notify          => Class['lxc::service'],
       install_options => $install_options,
     }
-  } ->
+  }
 
   # install lxcfs for monitoring and proper resource consumption reporting
   package { 'lxcfs':
